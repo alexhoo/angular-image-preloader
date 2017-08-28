@@ -92,17 +92,17 @@ module.exports = angular;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return preLoader; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return preloadImage; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return preloadBgImage; });
+
+
 var fallbackImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wEWEygNWiLqlwAAABl0RVh0Q29tbWVudABDcmVhdGVkIHdpdGggR0lNUFeBDhcAAAAMSURBVAjXY/j//z8ABf4C/tzMWecAAAAASUVORK5CYII=';
 
-var escapeUrlProtocol = function escapeUrlProtocol(url) {
-  return url.replace(/^https?:\/\//i, '//');
+var _escapeUrlProtocol = function _escapeUrlProtocol(url) {
+  return url.replace(/^https?\:\/\//i, '//');
 };
 
 var preLoader = function preLoader() {
   return function (url, successCallback, errorCallback) {
-    var image = new Image();
-
-    angular.element(image).bind('load', function () {
+    angular.element(new Image()).bind('load', function () {
       successCallback();
     }).bind('error', function () {
       errorCallback();
@@ -110,23 +110,22 @@ var preLoader = function preLoader() {
   };
 };
 
-var preloadImage = function preloadImage(preLoader) {
-  return { // eslint-disable-line no-shadow
+var preloadImage = function preloadImage(preLoader, $parse) {
+  return {
     restrict: 'A',
     terminal: true,
     priority: 100,
     link: function link(scope, element, attrs) {
-      var defaultImage = attrs.defaultImage || fallbackImage;
+      scope.default = attrs.defaultImage || fallbackImage;
 
       attrs.$observe('ngSrc', function () {
-        var url = escapeUrlProtocol(attrs.ngSrc);
-
-        attrs.$set('src', defaultImage);
+        var url = _escapeUrlProtocol(attrs.ngSrc);
+        attrs.$set('src', scope.default);
 
         preLoader(url, function () {
           attrs.$set('src', url);
         }, function () {
-          if (attrs.fallbackImage !== undefined) {
+          if (attrs.fallbackImage != undefined) {
             attrs.$set('src', attrs.fallbackImage);
           }
         });
@@ -142,24 +141,24 @@ var preloadImage = function preloadImage(preLoader) {
 };
 
 var preloadBgImage = function preloadBgImage(preLoader) {
-  return { // eslint-disable-line no-shadow
+  return {
     restrict: 'A',
     link: function link(scope, element, attrs) {
-      if (attrs.preloadBgImage !== undefined) {
-        var defaultImage = attrs.defaultImage || fallbackImage;
+      if (attrs.preloadBgImage != undefined) {
+        scope.default = attrs.defaultImage || fallbackImage;
 
         attrs.$observe('preloadBgImage', function () {
           element.css({
-            'background-image': 'url("' + defaultImage + '");'
+            'background-image': 'url("' + scope.default + '")'
           });
           preLoader(attrs.preloadBgImage, function () {
             element.css({
-              'background-image': 'url("' + attrs.preloadBgImage + '");'
+              'background-image': 'url("' + attrs.preloadBgImage + '")'
             });
           }, function () {
-            if (attrs.fallbackImage !== undefined) {
+            if (attrs.fallbackImage != undefined) {
               element.css({
-                'background-image': 'url("' + attrs.fallbackImage + '");'
+                'background-image': 'url("' + attrs.fallbackImage + '")'
               });
             }
           });
@@ -34077,7 +34076,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 var MODULE_NAME = 'angular-image-preloader';
 
-__WEBPACK_IMPORTED_MODULE_0_angular___default.a.module(MODULE_NAME, []).factory('preLoader', __WEBPACK_IMPORTED_MODULE_1__angular_image_preloader__["a" /* preLoader */]).directive('preloadImage', ['preLoader', __WEBPACK_IMPORTED_MODULE_1__angular_image_preloader__["b" /* preloadImage */]]).directive('preloadBgImage', ['preLoader', __WEBPACK_IMPORTED_MODULE_1__angular_image_preloader__["c" /* preloadBgImage */]]);
+__WEBPACK_IMPORTED_MODULE_0_angular___default.a.module(MODULE_NAME, []).factory('preLoader', __WEBPACK_IMPORTED_MODULE_1__angular_image_preloader__["a" /* preLoader */]).directive('preloadImage', ['preLoader', '$parse', __WEBPACK_IMPORTED_MODULE_1__angular_image_preloader__["b" /* preloadImage */]]).directive('preloadBgImage', ['preLoader', __WEBPACK_IMPORTED_MODULE_1__angular_image_preloader__["c" /* preloadBgImage */]]);
 
 /* harmony default export */ __webpack_exports__["default"] = (MODULE_NAME);
 
