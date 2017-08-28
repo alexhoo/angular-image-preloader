@@ -132,7 +132,7 @@ var preloadImage = function preloadImage(preLoader) {
         });
       });
       var fn = $parse(attrs.onImgLoad);
-      elem.bind('load', function (event) {
+      element.bind('load', function (event) {
         scope.$apply(function () {
           fn(scope, { $event: event });
         });
