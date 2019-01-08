@@ -4,8 +4,6 @@
   "description": "Asynchronous Image Preloader Directive for Angular 1.X",
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack && uglifyjs ./dist/angular-image-preloader.js -c -m -o ./dist/angular-image-preloader.min.js --source-map ./dist/angular-image-preloader.min.js.map",
-    "postinstall": "npm run check-dependencies",
-    "check-dependencies": "nsp check",
     "lint": "eslint './'",
     "climate-coverage": "npm run test && codeclimate-test-reporter < coverage/lcov.info",
     "test": "cross-env NODE_ENV=test npm run lint && karma start"
